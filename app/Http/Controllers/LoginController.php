@@ -66,18 +66,18 @@ class LoginController extends Controller
                 'text' => $number,
             ]);
 
-            return redirect()->route('confirm.number');
+            return redirect()->route('confirm.login');
         }
         else
         {
-            Session::flash('message', "Номера не існує");
+            Session::flash('message', "Ви ввели невірний номер");
             return back();
         }
     }
 
-    public function confirmNumber(Request $request)
+    public function confirmLogin(Request $request)
     {
-        $user = User::where('code', $request->input('confirmNumber'))->first();
+        $user = User::where('code', $request->input('confirmLogin'))->first();
 
         if ($user)
         {

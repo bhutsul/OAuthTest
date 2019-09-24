@@ -9,13 +9,12 @@ use Socialite;
 use Illuminate\Routing\Controller;
 use Session;
 use Illuminate\Support\Facades\Validator;
+use Nexmo\Laravel\Facade\Nexmo;
 
 class RegisterController extends Controller
 {
-    public function registerPhone(Request $request)
+    public function registerPhone(\Nexmo\Client $nexmo, Request $request)
     {
-        $date = date('Y-m-d H:i:s');
-
         $data = [
             'lastName' => $request->input('lastName'),
             'name' => $request->input('name'),
@@ -32,16 +31,20 @@ class RegisterController extends Controller
             'patronimicName' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'city' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:13','unique:users']
         ];
+
         $validator = Validator::make($data, $rules);
 
         if ($validator->fails())
         {
-            Session::flash('message', "Не вірні дані");
-            return back();
+            return back()->withErrors($validator);
         }
         else
         {
+            $date = date('Y-m-d H:i:s');
+            $number = mt_rand();
+
             User::create([
                 'lastName' => $request->input('lastName'),
                 'name' => $request->input('name'),
@@ -52,7 +55,39 @@ class RegisterController extends Controller
                 'city' => $request->input('city'),
                 'registrationDate' => $date,
             ]);
+
+            $user = User::where('phone', $request->input('phone'))->first();
+            $user->code = $number;
+            $user->save();
+
+            $nexmo->message()->send([
+                'to' => $user->phone,
+                'from' => '+380977133514',
+                'text' => $number,
+            ]);
+
+            return redirect()->route('confirm.register');
+
+        }
+    }
+
+
+    public function confirmRegister(Request $request)
+    {
+        $user = User::where('code', $request->input('confirmRegister'))->first();
+
+        if ($user)
+        {
+            $user->active = 1;
+            $user->code = null;
+            $user->save();
+
             return redirect()->intended('/login');
+        }
+        else
+        {
+            Session::flash('message', "Невірний код");
+            return back();
         }
     }
 }

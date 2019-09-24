@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->text('city')->nullable();
             $table->dateTime('registrationDate')->nullable();
             $table->text('code')->nullable();
+            $table->boolean('active')->default(0);
         });
     }
 

@@ -23,8 +23,11 @@ Route::get('/register', function () {
     return view('auth/register');
 });
 
-Route::get('/confirmNumber', function () {
-    return view('auth/confirmNumber');
+Route::get('/confirmLogin', function () {
+    return view('auth/confirmLogin');
+});
+Route::get('/confirmRegister', function () {
+    return view('auth/confirmRegister');
 });
 
 
@@ -40,4 +43,5 @@ Route::post('/home', 'HomeController@logout')->name('logout');
 Route::post('/register', 'RegisterController@registerPhone')->name('register.phone');
 Route::post('/login', 'LoginController@loginPhone')->name('login.phone');
 
-Route::post('/confirmNumber', 'LoginController@confirmNumber')->name('confirm.number');
+Route::post('/confirmLogin', 'LoginController@confirmLogin')->name('confirm.login');
+Route::post('/confirmRegister', 'RegisterController@confirmRegister')->name('confirm.register');

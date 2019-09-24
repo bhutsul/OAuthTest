@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-    <form method="POST" action="{{ route('confirm.number') }}">
+    <form method="POST" action="{{ route('confirm.login') }}">
         @csrf
-        <label for="confirmNumber">{{ __('Введіть код з SMS') }}</label><br />
-        <input id="confirmNumber" type="text" name="confirmNumber" ><br />
+        <label for="confirmLogin">{{ __('Введіть код з SMS') }}</label><br />
+        <input id="confirmLogin" type="text" name="confirmLogin" ><br />
 
         <button type="submit">
             {{ __('Підтвердити') }}

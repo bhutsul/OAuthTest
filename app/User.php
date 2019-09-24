@@ -13,6 +13,6 @@ class User extends Authenticatable
     public $timestamps = false;
 
     protected $fillable = [
-        'lastName', 'name', 'patronimicName', 'dateOfBirth', 'phone', 'email', 'city', 'registrationDate',
+        'lastName', 'name', 'patronimicName', 'dateOfBirth', 'phone', 'email', 'city', 'registrationDate','active','code',
     ];
 }
